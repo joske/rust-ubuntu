@@ -4,9 +4,10 @@ FROM ubuntu:jammy
 ENV DEBIAN_FRONTEND=noninteractive
 ENV USER="rust"
 
-RUN apt update \
-  && apt dist-upgrade -y \
-  && apt install -y curl \
+RUN apt update && apt dist-upgrade && \
+  apt install -y software-properties-common && add-apt-repository ppa:neovim-ppa/unstable && apt update && \
+  apt install -y neovim \
+  curl \
   build-essential \
   ca-certificates \
   llvm-dev \
@@ -18,10 +19,15 @@ RUN apt update \
   file \
   net-tools \
   pkg-config \
-  neovim \
   vim \
   make \
   lsof \
+  fzf \
+  ripgrep \
+  yarn \
+  nodejs \
+  npm \
+  lldb \
   inetutils-ping \
   inetutils-telnet \
   openssl \
@@ -53,6 +59,8 @@ RUN $HOME/.cargo/bin/rustup install nightly
 RUN $HOME/.cargo/bin/rustup component add rust-analyzer
 
 RUN ln -sf $($HOME/.cargo/bin/rustup which --toolchain stable rust-analyzer) $HOME/.cargo/bin/rust-analyzer
+
+COPY .tmux.conf /home/$USER/.tmux.conf
 
 RUN echo export PATH=$PATH:$HOME/.cargo/bin >> $HOME/.bashrc
 
