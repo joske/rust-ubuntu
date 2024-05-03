@@ -1,12 +1,12 @@
-FROM ubuntu:lunar
+FROM ubuntu:noble
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
 ENV USER="rust"
 
-RUN apt update \
-  && apt dist-upgrade -y \
-  && apt install -y curl \
+RUN apt update && apt dist-upgrade && \
+  apt install -y neovim \
+  curl \
   build-essential \
   ca-certificates \
   llvm-dev \
@@ -18,30 +18,24 @@ RUN apt update \
   file \
   net-tools \
   pkg-config \
-  neovim \
   vim \
   make \
   lsof \
+  fzf \
+  ripgrep \
+  yarn \
+  nodejs \
+  npm \
+  lldb \
   inetutils-ping \
   inetutils-telnet \
   openssl \
+  tmux \
   libssl-dev \
   zsh \
   sudo \
   sccache \
   fish
-
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-
-COPY config.toml /root/.cargo/config.toml
-
-RUN $HOME/.cargo/bin/cargo install cargo-udeps --locked
-
-RUN $HOME/.cargo/bin/rustup install nightly
-
-RUN $HOME/.cargo/bin/rustup component add rust-analyzer
-
-RUN ln -sf $($HOME/.cargo/bin/rustup which --toolchain stable rust-analyzer) $HOME/.cargo/bin/rust-analyzer
 
 # create a non root user
 RUN groupadd $USER
@@ -54,6 +48,23 @@ RUN echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 USER $USER
 WORKDIR /home/$USER
+
+# tmux
+COPY .tmux.conf /home/$USER/.tmux.conf
+
+# fish
+RUN mkdir -p /home/rust/.config/fish/conf.d/
+
+# rust stuff
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+RUN $HOME/.cargo/bin/rustup install nightly
+RUN $HOME/.cargo/bin/rustup component add rust-analyzer
+RUN ln -sf $($HOME/.cargo/bin/rustup which --toolchain stable rust-analyzer) $HOME/.cargo/bin/rust-analyzer
+RUN echo export PATH=$PATH:$HOME/.cargo/bin >> $HOME/.bashrc
+COPY config.toml /root/.cargo/config.toml
+
+# install my neovim config
+RUN git clone -b minimal https://github.com/joske/astronvim_v4 ~/.config/nvim
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog 
