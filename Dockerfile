@@ -60,6 +60,8 @@ RUN $HOME/.cargo/bin/rustup component add rust-analyzer
 
 RUN ln -sf $($HOME/.cargo/bin/rustup which --toolchain stable rust-analyzer) $HOME/.cargo/bin/rust-analyzer
 
+RUN git clone -b minimal https://github.com/joske/astronvim_v4 ~/.config/nvim
+
 COPY .tmux.conf /home/$USER/.tmux.conf
 
 RUN echo export PATH=$PATH:$HOME/.cargo/bin >> $HOME/.bashrc
