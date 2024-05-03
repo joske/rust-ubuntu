@@ -50,7 +50,7 @@ USER $USER
 WORKDIR /home/$USER
 
 # tmux
-COPY .tmux.conf /home/$USER/.tmux.conf
+COPY tmux.conf /home/$USER/.tmux.conf
 
 # fish
 RUN mkdir -p /home/rust/.config/fish/conf.d/
