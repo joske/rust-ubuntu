@@ -52,7 +52,7 @@ WORKDIR /home/$USER
 # tmux
 COPY tmux.conf /home/$USER/.tmux.conf
 
-# fish
+# fish (must be before rust as rustup will setup some fish paths)
 RUN mkdir -p /home/rust/.config/fish/conf.d/
 RUN /usr/bin/fish -c "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
 RUN /usr/bin/fish -c "fisher install IlanCosman/tide@v6"
