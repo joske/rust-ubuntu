@@ -34,7 +34,8 @@ RUN apt update && apt dist-upgrade && \
   tmux \
   libssl-dev \
   zsh \
-  sudo
+  sudo \
+  fish
 
 # create a non root user
 RUN groupadd $USER
@@ -48,23 +49,22 @@ RUN echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 USER $USER
 WORKDIR /home/$USER
 
+# tmux
+COPY tmux.conf /home/$USER/.tmux.conf
+
+# fish (must be before rust as rustup will setup some fish paths)
+RUN mkdir -p /home/rust/.config/fish/conf.d/
+RUN /usr/bin/fish -c "alias -s vim nvim"
+RUN /usr/bin/fish -c "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
+
+# rust stuff
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-
-# COPY config.toml /root/.cargo/config.toml
-
-# RUN $HOME/.cargo/bin/cargo install cargo-udeps --locked
-
 RUN $HOME/.cargo/bin/rustup install nightly
-
-RUN $HOME/.cargo/bin/rustup component add rust-analyzer
-
 RUN ln -sf $($HOME/.cargo/bin/rustup which --toolchain stable rust-analyzer) $HOME/.cargo/bin/rust-analyzer
-
-RUN git clone -b minimal https://github.com/joske/astronvim_v4 ~/.config/nvim
-
-COPY .tmux.conf /home/$USER/.tmux.conf
-
 RUN echo export PATH=$PATH:$HOME/.cargo/bin >> $HOME/.bashrc
+
+# install my neovim config
+RUN git clone -b minimal https://github.com/joske/astronvim_v4 ~/.config/nvim
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog 
