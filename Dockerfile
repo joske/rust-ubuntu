@@ -56,6 +56,7 @@ COPY tmux.conf /home/$USER/.tmux.conf
 RUN mkdir -p /home/rust/.config/fish/conf.d/
 RUN /usr/bin/fish -c "alias -s vim nvim"
 RUN /usr/bin/fish -c "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
+RUN /usr/bin/fish -c "fisher install IlanCosman/tide@v5.0.1"
 
 # rust stuff
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
