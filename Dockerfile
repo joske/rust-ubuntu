@@ -35,6 +35,7 @@ RUN apt update && apt dist-upgrade && \
   libssl-dev \
   zsh \
   sudo \
+  protobuf-compiler \
   fish
 
 # create a non root user
