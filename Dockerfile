@@ -35,6 +35,7 @@ RUN apt update && apt dist-upgrade && \
   zsh \
   sudo \
   sccache \
+  protobuf-compiler \
   fish
 
 # create a non root user
