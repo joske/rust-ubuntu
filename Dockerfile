@@ -38,6 +38,10 @@ RUN apt update && apt dist-upgrade && \
   protobuf-compiler \
   fish
 
+#install lazygit
+COPY lazygit.sh /tmp/
+RUN chmod +x /tmp/lazygit.sh && /tmp/lazygit.sh && rm /tmp/lazygit.sh
+
 # create a non root user
 RUN groupadd $USER
 RUN useradd -g $USER -G root -s /bin/bash $USER
