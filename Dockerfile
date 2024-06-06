@@ -38,6 +38,10 @@ RUN apt update && apt dist-upgrade && \
   protobuf-compiler \
   fish
 
+#install lazygit
+COPY lazygit.sh /tmp/
+RUN chmod +x /tmp/lazygit.sh && /tmp/lazygit.sh && rm /tmp/lazygit.sh
+
 # create a non root user
 RUN groupadd $USER
 RUN useradd -g $USER -G root -s /bin/bash $USER
@@ -58,6 +62,7 @@ RUN mkdir -p /home/rust/.config/fish/conf.d/
 RUN /usr/bin/fish -c "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
 RUN /usr/bin/fish -c "fisher install IlanCosman/tide@v5.0.1"
 RUN /usr/bin/fish -c "alias -s vim nvim"
+RUN /usr/bin/fish -c "alias -s lg lazygit"
 
 # rust stuff
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
