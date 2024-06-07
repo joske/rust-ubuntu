@@ -18,11 +18,11 @@ main() {
 		grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' |
 		sort --version-sort |
 		tail -n1)
-	curl -LSfs "${url}/releases/download/${tag}/sccache-dist-${tag}-${triple}.tar.gz" \
+	curl -LSfs "${url}/releases/download/${tag}/sccache-${tag}-${triple}.tar.gz" \
 		-o sccache.tar.gz
 	tar -xvf sccache.tar.gz
 	rm sccache.tar.gz
-	cp "sccache-dist-${tag}-${triple}/sccache-dist" "/usr/bin/sccache"
+	cp "sccache-${tag}-${triple}/sccache" "/usr/bin/sccache"
 	chmod +x "/usr/bin/sccache"
 
 	popd
