@@ -78,9 +78,5 @@ COPY config.toml /home/$USER/.cargo/config.toml
 # install my neovim config
 RUN git clone -b minimal https://github.com/joske/astronvim_v4 ~/.config/nvim
 
-# clone snarkOS
-RUN git clone -b mainnet-staging https://github.com/AleoHQ/snarkOS.git build/snarkOS
-RUN git clone -b mainnet-staging https://github.com/AleoHQ/snarkVM.git build/snarkVM
-
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog 
