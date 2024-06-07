@@ -42,6 +42,10 @@ RUN apt update && apt dist-upgrade && \
 COPY lazygit.sh /tmp/
 RUN chmod +x /tmp/lazygit.sh && /tmp/lazygit.sh && rm /tmp/lazygit.sh
 
+#install sccache
+COPY sccache.sh /tmp/
+RUN chmod +x /tmp/sccache.sh && /tmp/sccache.sh && rm /tmp/sccache.sh
+
 # create a non root user
 RUN groupadd $USER
 RUN useradd -g $USER -G root -s /bin/bash $USER
@@ -69,6 +73,7 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 RUN $HOME/.cargo/bin/rustup install nightly
 RUN ln -sf $($HOME/.cargo/bin/rustup which --toolchain stable rust-analyzer) $HOME/.cargo/bin/rust-analyzer
 RUN echo export PATH=$PATH:$HOME/.cargo/bin >> $HOME/.bashrc
+COPY config.toml /home/$USER/.cargo/config.toml
 
 # install my neovim config
 RUN git clone -b minimal https://github.com/joske/astronvim_v4 ~/.config/nvim
