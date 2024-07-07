@@ -12,7 +12,6 @@ RUN apt update && apt dist-upgrade && \
   llvm-dev \
   libclang-dev \
   git \
-  lazygit \
   gzip \
   zip \
   unzip \
