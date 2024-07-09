@@ -71,7 +71,6 @@ RUN /usr/bin/fish -c "alias -s lg lazygit"
 # rust stuff
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 RUN $HOME/.cargo/bin/rustup install nightly
-RUN ln -sf $($HOME/.cargo/bin/rustup which --toolchain stable rust-analyzer) $HOME/.cargo/bin/rust-analyzer
 RUN echo export PATH=$PATH:$HOME/.cargo/bin >> $HOME/.bashrc
 COPY --chown=$USER:$USER config.toml /home/$USER/.cargo/config.toml
 
