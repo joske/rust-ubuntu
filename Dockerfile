@@ -59,7 +59,7 @@ USER $USER
 WORKDIR /home/$USER
 
 # tmux
-COPY tmux.conf /home/$USER/.tmux.conf
+COPY --chown=$USER:$USER tmux.conf /home/$USER/.tmux.conf
 
 # fish (must be before rust as rustup will setup some fish paths)
 RUN mkdir -p /home/rust/.config/fish/conf.d/
@@ -73,7 +73,7 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 RUN $HOME/.cargo/bin/rustup install nightly
 RUN ln -sf $($HOME/.cargo/bin/rustup which --toolchain stable rust-analyzer) $HOME/.cargo/bin/rust-analyzer
 RUN echo export PATH=$PATH:$HOME/.cargo/bin >> $HOME/.bashrc
-COPY config.toml /home/$USER/.cargo/config.toml
+COPY --chown=$USER:$USER config.toml /home/$USER/.cargo/config.toml
 
 # install my neovim config
 RUN git clone -b minimal https://github.com/joske/astronvim_v4 ~/.config/nvim
