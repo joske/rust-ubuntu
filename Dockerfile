@@ -4,7 +4,7 @@ FROM ubuntu:jammy
 ENV DEBIAN_FRONTEND=noninteractive
 ENV USER="rust"
 
-RUN apt update && apt dist-upgrade && \
+RUN apt update -y && apt dist-upgrade -y && \
   apt install -y software-properties-common && add-apt-repository ppa:neovim-ppa/unstable && apt update && \
   apt install -y neovim \
   curl \
