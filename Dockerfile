@@ -4,7 +4,7 @@ FROM ubuntu:noble
 ENV DEBIAN_FRONTEND=noninteractive
 ENV USER="rust"
 
-RUN apt update && apt dist-upgrade && \
+RUN apt update && apt dist-upgrade -y && \
   apt install -y neovim \
   curl \
   build-essential \
