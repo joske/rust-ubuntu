@@ -2,7 +2,8 @@ FROM ubuntu:noble
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
-ENV USER="rust"
+# Ubuntu base image already has a user named ubuntu, using this avoids permissions issues with bind mounts
+ENV USER="ubuntu"
 
 RUN apt update && apt dist-upgrade -y && \
   apt install -y neovim \
@@ -42,14 +43,11 @@ RUN apt update && apt dist-upgrade -y && \
 COPY lazygit.sh /tmp/
 RUN chmod +x /tmp/lazygit.sh && /tmp/lazygit.sh && rm /tmp/lazygit.sh
 
-# create a non root user
-RUN groupadd $USER
-RUN useradd -g $USER -G root -s /bin/bash $USER
-RUN mkdir -p /home/$USER
-RUN chown $USER:$USER /home/$USER
-
 # allow sudo without password
 RUN echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# change the shell to fish
+RUN chsh -s /usr/bin/fish $USER
 
 USER $USER
 WORKDIR /home/$USER
@@ -58,7 +56,7 @@ WORKDIR /home/$USER
 COPY --chown=$USER:$USER tmux.conf /home/$USER/.tmux.conf
 
 # fish (must be before rust as rustup will setup some fish paths)
-RUN mkdir -p /home/rust/.config/fish/conf.d/
+RUN mkdir -p /home/$USER/.config/fish/conf.d/
 RUN /usr/bin/fish -c "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
 RUN /usr/bin/fish -c "fisher install IlanCosman/tide@v6"
 RUN /usr/bin/fish -c "tide configure --auto --style=Rainbow --prompt_colors='True color' --show_time='24-hour format' --rainbow_prompt_separators=Angled --powerline_prompt_heads=Sharp --powerline_prompt_tails=Flat --powerline_prompt_style='One line' --prompt_spacing=Compact --icons='Many icons' --transient=No"
