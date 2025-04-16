@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV USER="ubuntu"
 
 RUN apt update && apt dist-upgrade -y && \
-  apt install -y neovim \
+  apt install -y \
   curl \
   build-essential \
   ca-certificates \
@@ -48,6 +48,11 @@ RUN echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # change the shell to fish
 RUN chsh -s /usr/bin/fish $USER
+
+# install neovim ppa
+RUN apt install -y software-properties-common && add-apt-repository ppa:neovim-ppa/unstable -y && \
+  apt update && \
+  apt install -y neovim
 
 USER $USER
 WORKDIR /home/$USER
